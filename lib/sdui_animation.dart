@@ -109,7 +109,6 @@ class SDUIAnimation extends StatelessWidget {
     this.start,
     this.finish,
 
-
     this.direction,
     this.intervalStart,
     this.intervalEnd,
@@ -202,10 +201,14 @@ class SDUIAnimation extends StatelessWidget {
     switch(animationType) {
       case AnimationType.crossFade: {
         return AnimatedCrossFade(
-            firstChild: child ?? context.widget,
-            secondChild: secondChild ?? context.widget,
-            crossFadeState: shouldWelcomeGuest! ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-            duration: duration ?? const Duration(seconds: 0));
+          firstChild: child ?? context.widget,
+          secondChild: secondChild ?? context.widget,
+          crossFadeState: shouldWelcomeGuest! ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          duration: duration ?? const Duration(seconds: 0),
+          firstCurve: Curves.easeOut,
+          secondCurve: Curves.easeIn,
+          sizeCurve: Curves.bounceOut,
+        );
       }
 
       case AnimationType.opacity: {
