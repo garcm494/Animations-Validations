@@ -3,6 +3,8 @@ import 'package:animations_sample/booked/booked_card.dart';
 import 'package:animations_sample/complex_animations_route.dart';
 import 'package:animations_sample/plp/plp_main_page_route.dart';
 import 'package:animations_sample/sdui_custom_page_route.dart';
+import 'package:animations_sample/transitions/circle_transition_clipper.dart';
+import 'package:animations_sample/transitions/detail_view_transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:animations_sample/sdui_animation.dart';
 import 'random_animations_route.dart';
@@ -254,27 +256,53 @@ class TransitionsSampleRoute extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20,),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                SDUICustomPageRoute(
-                    child: const TransitionsDetailRoute(),
-                    direction: AxisDirection.down
-                ),
+          const SizedBox(height: 200,),
+          GestureDetector(
+
+            onTap: () {
+              Navigator.push(
+                  context,
+                  _createRoute()
               );
             },
-            child: const Row(
-              children: [
-                Icon(Icons.arrow_downward),
-                SizedBox(width: 10,),
-                Text('Circular Reveal')
-              ],
+
+            child: const Image(
+              height: 50.0,
+              width: 50.0,
+              image: AssetImage('lib/assets/spark.png'),
             ),
-          ),
-          const SizedBox(height: 20,),
+          )
         ],
       )
+    );
+  }
+
+  /// For circular transition reveal
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const DetailViewTransitionsRoute(),
+      transitionDuration: const Duration(milliseconds: 1000),
+      reverseTransitionDuration: const Duration(milliseconds: 1000),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        var screenSize = MediaQuery.of(context).size;
+        var centerCircleClipper = Offset(
+            screenSize.width / 2, screenSize.height / 2
+        );
+
+        double beginRadius = 0.0;
+        double endRadius = screenSize.height * 1.2;
+
+        var radiusTween = Tween(begin: beginRadius, end: endRadius);
+        var radiusTweenAnimation = animation.drive(radiusTween);
+
+        return ClipPath(
+          clipper: CircleTransitionClipper(
+            radius: radiusTweenAnimation.value,
+            center: centerCircleClipper,
+          ),
+          child: child,
+        );
+      }
     );
   }
 
