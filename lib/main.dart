@@ -253,7 +253,26 @@ class TransitionsSampleRoute extends StatelessWidget {
                 ),
               ),
             ],
-          )
+          ),
+          const SizedBox(height: 20,),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                SDUICustomPageRoute(
+                    child: const TransitionsDetailRoute(),
+                    direction: AxisDirection.down
+                ),
+              );
+            },
+            child: const Row(
+              children: [
+                Icon(Icons.arrow_downward),
+                SizedBox(width: 10,),
+                Text('Circular Reveal')
+              ],
+            ),
+          ),
+          const SizedBox(height: 20,),
         ],
       )
     );
